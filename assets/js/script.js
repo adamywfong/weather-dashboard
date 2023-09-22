@@ -6,26 +6,29 @@ var userInput = $("#city-search");
 var historyList = $('#history-container');
 var currWeather = $('#weather-now');
 var forecast5 = $('#forecast-container');
-var history;
+var pastSearches;
+var apiKey = '2725dd5b69d4117690f6ed292d63b0cb';
 
 // init opens saved history shows last searched weather
 function init() {
-    history = localStorage.getItem("history");
-    if (history) {
-        history = JSON.parse(history)
+    pastSearches = localStorage.getItem('history');
+    console.log(pastSearches);
+    if (pastSearches) {
+        pastSearches = JSON.parse(pastSearches)
         populateHistory;
-        showWeather(history[history.length-1].lat,history[history.length-1].lon);
+        showWeather(pastSearches[pastSearches.length-1].lat,pastSearches[pastSearches.length-1].lon);
     } else {
-        history = [];
+        pastSearches = [];
     }
 }
+
 
 // populates history with clickable buttons of previously searched cities
 function populateHistory() {
     historyList.html('');
-    for (var i=0; i < history.length; i++) {
+    for (var i=0; i < pastSearches.length; i++) {
         var historyEl = $('<button class="btn btn-secondary btn-history" type="button" data-index="' + i + '">')
-        historyEl.text(history[i].name);
+        historyEl.text(pastSearches[i].name);
         historyList.append(historyEl);
     }
 }
@@ -41,8 +44,8 @@ function getGeoData(city) {
         })
         .then(function(data) {
             if (data.length) {
-                history.push({name: data[0].name, lat: data[0].lat, lon: data[0].lon});
-                localStorage.setItem("history", JSON.stringify(history));
+                pastSearches.push({name: data[0].name, lat: data[0].lat, lon: data[0].lon});
+                localStorage.setItem("history", JSON.stringify(pastSearches));
                 showWeather(data[0].lat,data[0].lon);
             } else {
                 showError();
@@ -88,25 +91,25 @@ function showError() {
     console.log("City not found");
 }
 
-// When city is submitted, searches for city's weather
-userInput.on('submit', function(event) {
-    event.preventDefault();
-    queryCity = $('#text-input').val().trim();
-    $('#text-input').val('');
-    if (queryCity) {
-        getGeoData(queryCity);
+$(function() {
+    init();
+    // When city is submitted, searches for city's weather
+    userInput.on('submit', function(event) {
+        event.preventDefault();
+        var queryCity = $('#text-input').val().trim();
+        $('#text-input').val('');
+        if (queryCity) {
+            getGeoData(queryCity);
+            populateHistory;
+        }
+    });
+    // When previously searched city is clicked, searches for city's weather again
+    historyList.on('click', '.btn-history', function(event) {
+        event.preventDefault();
+        indexClicked = parseInt(event.target.closest('.btn-history').dataset.index);
+        showWeather(pastSearches[indexClicked].lat,histpastSearchesory[indexClicked].lon);
+        pastSearches.push(pastSearches.splice(indexClicked,1)[0]);
+        localStorage.setItem("history", JSON.stringify(pastSearches));
         populateHistory;
-    }
-});
-
-// When previously searched city is clicked, searches for city's weather again
-historyList.on('click', '.btn-history', function(event) {
-    event.preventDefault();
-    indexClicked = parseInt(event.target.closest('.btn-history').dataset.index);
-    showWeather(history[indexClicked].lat,history[indexClicked].lon);
-    history.push(history.splice(indexClicked,1)[0]);
-    localStorage.setItem("history", JSON.stringify(history));
-    populateHistory;
+    })
 })
-
-// init();
