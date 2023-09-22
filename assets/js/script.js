@@ -7,12 +7,20 @@ var historyList = $('#history-container');
 var currWeather = $('#weather-now');
 var forecast5 = $('#forecast-container');
 var history;
-var last
+var lastCity;
 
+// init opens saved history shows last searched weather
 function init() {
-    pastSearches = localStorage.getItem("history");
-    if (pastSearches) {
-        populateHistory(pastSearches);
+    history = localStorage.getItem("history");
+    if (history) {
+        history = JSON.parse(history)
+        populateHistory(history);
+    } else {
+        history = [];
+    }
+    lastCity = localStorage.getItem("lastCity");
+    if (lastCity) {
+        showWeather(lastCity);
     }
 }
 
@@ -20,14 +28,24 @@ function populateHistory(array) {
     historyList.html('');
     for (var i=0; i < array.length; i++) {
         var historyEl = $('<button class="btn-history" data-index="' + i + '">')
-        historyEl.text(array[i].city);
+        historyEl.text(array[i]);
         historyList.append(historyEl);
     }
 }
 
-userInput.on('submit', function() {
-    
+userInput.on('submit', function(event) {
+    event.preventDefault();
+    queryCity = userInput.children('<input>').val().trim();
+    if (queryCity) {
+        history.push(queryCity);
+        localStorage.setItem("history", JSON.stringify(history));
+        showWeather(queryCity);
+        populateHistory(history);
+    }
 });
-historyList.on('click', '.btn-history', function() {
 
+historyList.on('click', '.btn-history', function(event) {
+    event.preventDefault();
+    indexClicked = event.target.closest('.btn-history').dataset.index;
+    showWeather(history[indexClicked]);
 })
