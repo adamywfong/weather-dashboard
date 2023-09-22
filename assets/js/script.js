@@ -20,15 +20,17 @@ function init() {
     }
 }
 
+// populates history with clickable buttons of previously searched cities
 function populateHistory() {
     historyList.html('');
     for (var i=0; i < history.length; i++) {
-        var historyEl = $('<button class="btn btn-secondary btn-history" data-index="' + i + '">')
+        var historyEl = $('<button class="btn btn-secondary btn-history" type="button" data-index="' + i + '">')
         historyEl.text(history[i].name);
         historyList.append(historyEl);
     }
 }
 
+// Searches for a given city and gets name, latitude, and longitude to save to history and calls showWeather
 function getGeoData(city) {
     fetch("http://api.openweathermap.org/geo/1.0/direct?appid=" + apiKey + "&q=" + city)
         .then(function(response) {
@@ -48,6 +50,7 @@ function getGeoData(city) {
         })
 }
 
+// Finds weather forecast for given latitude, longitude coordinates and displays current day and 5 day forecast
 function showWeather(lat,lon) {
     fetch("api.openweathermap.org/data/2.5/forecast?units=imperial&lat=" + lat + "&lon=" +lon+ "&appid=" + apiKey)
     .then(function(response) {
@@ -85,19 +88,25 @@ function showError() {
     console.log("City not found");
 }
 
+// When city is submitted, searches for city's weather
 userInput.on('submit', function(event) {
     event.preventDefault();
-    queryCity = userInput.children('<input>').val().trim();
+    queryCity = $('#text-input').val().trim();
+    $('#text-input').val('');
     if (queryCity) {
         getGeoData(queryCity);
         populateHistory;
     }
 });
 
+// When previously searched city is clicked, searches for city's weather again
 historyList.on('click', '.btn-history', function(event) {
     event.preventDefault();
-    indexClicked = event.target.closest('.btn-history').dataset.index;
+    indexClicked = parseInt(event.target.closest('.btn-history').dataset.index);
     showWeather(history[indexClicked].lat,history[indexClicked].lon);
     history.push(history.splice(indexClicked,1)[0]);
+    localStorage.setItem("history", JSON.stringify(history));
     populateHistory;
 })
+
+// init();
