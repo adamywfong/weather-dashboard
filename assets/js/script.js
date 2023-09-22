@@ -13,18 +13,18 @@ function init() {
     history = localStorage.getItem("history");
     if (history) {
         history = JSON.parse(history)
-        populateHistory(history);
+        populateHistory;
         showWeather(history[history.length-1].lat,history[history.length-1].lon);
     } else {
         history = [];
     }
 }
 
-function populateHistory(array) {
+function populateHistory() {
     historyList.html('');
-    for (var i=0; i < array.length; i++) {
-        var historyEl = $('<button class="btn-history" data-index="' + i + '">')
-        historyEl.text(array[i].name);
+    for (var i=0; i < history.length; i++) {
+        var historyEl = $('<button class="btn btn-secondary btn-history" data-index="' + i + '">')
+        historyEl.text(history[i].name);
         historyList.append(historyEl);
     }
 }
@@ -90,7 +90,7 @@ userInput.on('submit', function(event) {
     queryCity = userInput.children('<input>').val().trim();
     if (queryCity) {
         getGeoData(queryCity);
-        populateHistory(history);
+        populateHistory;
     }
 });
 
@@ -98,4 +98,6 @@ historyList.on('click', '.btn-history', function(event) {
     event.preventDefault();
     indexClicked = event.target.closest('.btn-history').dataset.index;
     showWeather(history[indexClicked].lat,history[indexClicked].lon);
+    history.push(history.splice(indexClicked,1)[0]);
+    populateHistory;
 })
