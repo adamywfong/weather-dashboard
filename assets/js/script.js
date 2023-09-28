@@ -71,16 +71,16 @@ function showWeather(lat,lon) {
         const windEl = $('<p>Wind: ' + data.list[0].wind.speed + ' MPH</p>');
         const humidityEl = $('<p>Humidity: ' + data.list[0].main.humidity + ' &#37</p>');
         currWeather.append(headEl,tempEl,windEl,humidityEl);
-        forecast5.html('<h3>5-Day Forecast:</h3>')
+        $('#forecast5').text('5-Day Forecast:')
         for (let i=7; i<data.list.length; i+=8) {
-            const dayEl = $('<div class="card">');
+            const dayEl = $('<div class="card text-bg-success col">');
             let date = data.list[i].dt;
             date = dayjs.unix(date).format('M/D/YYYY');
-            const dateEl = $('<h4>'+date+'</h4>');
+            const dateEl = $('<h5 class="card-title">'+date+'</h5>');
             const iconEl = $("<img src='https://openweathermap.org/img/wn/" + data.list[i].weather[0].icon + "@2x.png' alt="+ data.list[i].weather[0].main + ">");
-            const tempEl = $('<p>Temp: ' + data.list[i].main.temp + '&degF</p>');
-            const windEl = $('<p>Wind: ' + data.list[i].wind.speed + ' MPH</p>');
-            const humidityEl = $('<p>Humidity: ' + data.list[i].main.humidity + ' &#37</p>');
+            const tempEl = $('<p class="card-text">Temp: ' + data.list[i].main.temp + '&degF</p>');
+            const windEl = $('<p class="card-text">Wind: ' + data.list[i].wind.speed + ' MPH</p>');
+            const humidityEl = $('<p class="card-text">Humidity: ' + data.list[i].main.humidity + ' &#37</p>');
             dayEl.append(dateEl,iconEl,tempEl,windEl,humidityEl);
             forecast5.append(dayEl);
         }

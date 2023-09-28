@@ -15,26 +15,31 @@
         <header class="bg-dark text-light text-center mb-5 p-3">
             <h1>Weather Dashboard</h1>
         </header>
-        <div class="row">
-            <aside class="col-12 col-md-4 col-lg-3">
-                    <form class="col-12" id="city-search">
-                        <label for="text-input" class="form-label m-1">Search for a City:</label>
-                        <input class="form-control col-12 m-1" id="text-input" type="text" placeholder="Enter a city">
-                        <button class="btn btn-primary col-12 m-1">Search</button>
-                    </form>
-                    <div id="history-container" class="col-12">
+        <main class="bg-light.bg-gradient">
+            <div class="row">
+                <aside class="col-12 col-md-4 col-lg-3">
+                        <form class="col-12" id="city-search">
+                            <label for="text-input" class="form-label m-1">Search for a City:</label>
+                            <input class="form-control col-12 m-1" id="text-input" type="text" placeholder="Enter a city">
+                            <button class="btn btn-primary col-12 m-1">Search</button>
+                        </form>
+                        <div id="history-container" class="col-12">
 
-                    </div>
-            </aside>
-            <div class = "col-12 col-md-8 col-lg-9>">
-                <section id="weather-now">
-                    Lorem Ipsum 
-                </section>
-                <section id="forecast-container">
-                    Lorem Ipsum
-                </section>
+                        </div>
+                </aside>
+                <div class = "col-12 col-md-8 col-lg-9>">
+                    <section class="row border" id="weather-now">
+                        
+                    </section>
+                    <section class="row">
+                        <h3 id="forecast5"></h3>
+                        <div class="row" id="forecast-container">
+
+                        </div>
+                    </section>
+                </div>
             </div>
-        </div>
+        </main>
         <script
       src="https://cdn.jsdelivr.net/npm/dayjs@1.11.3/dayjs.min.js"
       integrity="sha256-iu/zLUB+QgISXBLCW/mcDi/rnf4m4uEDO0wauy76x7U="
