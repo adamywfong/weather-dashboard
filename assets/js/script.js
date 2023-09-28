@@ -1,4 +1,3 @@
-// API Key: 2725dd5b69d4117690f6ed292d63b0cb
 // API call format: api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key}
 // Geocoder API Call format: http://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}
 // Geocoder by zip code: http://api.openweathermap.org/geo/1.0/zip?zip={zip code},{country code}&appid={API key}
@@ -19,7 +18,6 @@ function init() {
     if (pastSearches) {
         pastSearches = JSON.parse(pastSearches)
         populateHistory();
-        // showWeather(pastSearches[pastSearches.length-1].lat,pastSearches[pastSearches.length-1].lon);
     } else {
         pastSearches = [];
     }
@@ -37,7 +35,7 @@ function populateHistory() {
 
 // Searches for a given city and gets name, latitude, and longitude to save to history and calls showWeather
 function getGeoData(city) {
-    fetch("https://cors-anywhere.herokuapp.com/http://api.openweathermap.org/geo/1.0/direct?appid=" + apiKey + "&q=" + city)
+    fetch("https://api.openweathermap.org/geo/1.0/direct?appid=" + apiKey + "&q=" + city)
         .then(function(response) {
             if (!response.ok) {
                 throw response.json();
@@ -56,7 +54,7 @@ function getGeoData(city) {
 
 // Finds weather forecast for given latitude, longitude coordinates and displays current day and 5 day forecast
 function showWeather(lat,lon) {
-    fetch("https://cors-anywhere.herokuapp.com/api.openweathermap.org/data/2.5/forecast?units=imperial&lat=" + lat + "&lon=" +lon+ "&appid=" + apiKey)
+    fetch("https://api.openweathermap.org/data/2.5/forecast?units=imperial&lat=" + lat + "&lon=" +lon+ "&appid=" + apiKey)
     .then(function(response) {
         if (!response.ok) {
             throw response.json();
@@ -87,11 +85,6 @@ function showWeather(lat,lon) {
             forecast5.append(dayEl);
         }
     })
-}
-
-// TODO: add error message
-function showError() {
-    console.log("City not found");
 }
 
 $(function() {
