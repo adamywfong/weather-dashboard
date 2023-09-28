@@ -29,9 +29,8 @@ function init() {
 function populateHistory() {
     historyList.html('');
     for (let i=0; i < pastSearches.length; i++) {
-        const historyEl = $('<button class="btn btn-secondary btn-history" type="button" data-index="' + i + '">')
+        const historyEl = $('<button class="btn btn-outline-primary btn-history col-12 m-1" type="button" data-index="' + i + '">')
         historyEl.text(pastSearches[i].name);
-        console.log(historyEl);
         historyList.append(historyEl);
     }
 }
@@ -64,24 +63,25 @@ function showWeather(lat,lon) {
         return response.json();
     })
     .then(function(data){
-        console.log(data);
-        var date = data.list[0].dt;
+        currWeather.empty();
+        let date = data.list[0].dt;
         date = dayjs.unix(date).format('M/D/YYYY');
-        var headEl = $('<h1>'+ data.city.name + " (" + date + ") <img src='https://openweathermap.org/img/wn/" + data.list[0].weather[0].icon + "@2x.png' alt="+ data.list[0].weather[0].main + "></hi>");
-        var tempEl = $('<p>Temp: ' + data.list[0].main.temp + '&degF</p>');
-        var windEl = $('<p>Wind: ' + data.list[0].wind.speed + 'MPH</p>');
-        var humidityEl = $('<p>Humidity: ' + data.list[0].main.humidity + '&#37</p>');
+        const headEl = $('<h2>'+ data.city.name + " (" + date + ") <img src='https://openweathermap.org/img/wn/" + data.list[0].weather[0].icon + "@2x.png' alt="+ data.list[0].weather[0].main + "></h2>");
+        const tempEl = $('<p>Temp: ' + data.list[0].main.temp + '&degF</p>');
+        const windEl = $('<p>Wind: ' + data.list[0].wind.speed + ' MPH</p>');
+        const humidityEl = $('<p>Humidity: ' + data.list[0].main.humidity + ' &#37</p>');
         currWeather.append(headEl,tempEl,windEl,humidityEl);
-        // add header that says "5 day forecast" to forecast5 
-        for (var i=7; i<data.list.length; i+=8) {
-            dayEl = $('<div class="card">');
-            date = data.list[i].dt;
+        forecast5.html('<h3>5-Day Forecast:</h3>')
+        for (let i=7; i<data.list.length; i+=8) {
+            const dayEl = $('<div class="card">');
+            let date = data.list[i].dt;
             date = dayjs.unix(date).format('M/D/YYYY');
-            icon = data.list[i].weather.icon;
-            temp = data.list[i].main.temp;
-            wind = data.list[i].wind.speed;
-            humidity = data.list[i].main.humidity;
-            //give dayEl all the things
+            const dateEl = $('<h4>'+date+'</h4>');
+            const iconEl = $("<img src='https://openweathermap.org/img/wn/" + data.list[i].weather[0].icon + "@2x.png' alt="+ data.list[i].weather[0].main + ">");
+            const tempEl = $('<p>Temp: ' + data.list[i].main.temp + '&degF</p>');
+            const windEl = $('<p>Wind: ' + data.list[i].wind.speed + ' MPH</p>');
+            const humidityEl = $('<p>Humidity: ' + data.list[i].main.humidity + ' &#37</p>');
+            dayEl.append(dateEl,iconEl,tempEl,windEl,humidityEl);
             forecast5.append(dayEl);
         }
     })
